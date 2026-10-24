@@ -6,4 +6,10 @@ public class PokemonServiceExceptions {
             super(mensaje);
         }
     }
+
+    public static class PokemonYaExisteException extends RuntimeException {
+        public PokemonYaExisteException(String mensaje) {
+            super(mensaje);
+        }
+    }
 }

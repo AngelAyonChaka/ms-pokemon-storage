@@ -3,6 +3,7 @@ package com.practice.ms_pokemon_storage.service.impl;
 import com.practice.ms_pokemon_storage.dto.PokemonRequest;
 import com.practice.ms_pokemon_storage.dto.PokemonResponse;
 import com.practice.ms_pokemon_storage.exception.PokemonServiceExceptions.PokemonNoEncontradoException;
+import com.practice.ms_pokemon_storage.exception.PokemonServiceExceptions.PokemonYaExisteException;
 import com.practice.ms_pokemon_storage.models.Pokemon;
 import com.practice.ms_pokemon_storage.repository.PokemonRepository;
 import com.practice.ms_pokemon_storage.service.PokemonService;
@@ -23,6 +24,12 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public PokemonResponse guardarPokemon(PokemonRequest request) {
+        if (pokemonRepository.existsByName(request.name())) {
+            throw new PokemonYaExisteException(
+                    "El pokemon con nombre '" + request.name() + "' ya fue guardado"
+            );
+        }
+
         // 1. Convertimos el DTO de entrada (Request) a nuestra Entity
         Pokemon pokemon = new Pokemon();
         pokemon.setPokemonId(request.pokemonId());

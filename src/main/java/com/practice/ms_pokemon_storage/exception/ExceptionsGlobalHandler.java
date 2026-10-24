@@ -1,6 +1,7 @@
 package com.practice.ms_pokemon_storage.exception;
 
 import com.practice.ms_pokemon_storage.exception.PokemonServiceExceptions.PokemonNoEncontradoException;
+import com.practice.ms_pokemon_storage.exception.PokemonServiceExceptions.PokemonYaExisteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,11 @@ public class ExceptionsGlobalHandler {
     @ExceptionHandler(PokemonNoEncontradoException.class)
     public ResponseEntity<ApiError> manejarPokemonNoEncontrado(PokemonNoEncontradoException exception) {
         return crearRespuesta(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(PokemonYaExisteException.class)
+    public ResponseEntity<ApiError> manejarPokemonYaExiste(PokemonYaExisteException exception) {
+        return crearRespuesta(HttpStatus.CONFLICT, exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -2,6 +2,7 @@ package com.practice.ms_pokemon_storage.service.impl;
 
 import com.practice.ms_pokemon_storage.dto.PokemonRequest;
 import com.practice.ms_pokemon_storage.dto.PokemonResponse;
+import com.practice.ms_pokemon_storage.exception.PokemonServiceExceptions.PokemonListaVaciaException;
 import com.practice.ms_pokemon_storage.exception.PokemonServiceExceptions.PokemonNoEncontradoException;
 import com.practice.ms_pokemon_storage.exception.PokemonServiceExceptions.PokemonYaExisteException;
 import com.practice.ms_pokemon_storage.models.Pokemon;
@@ -50,7 +51,14 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public List<PokemonResponse> obtenerTodos() {
         // findAll() ya viene incluido gratis al heredar de JpaRepository
-        return pokemonRepository.findAll().stream()
+        List<Pokemon> pokemones = pokemonRepository.findAll();
+        if (pokemones.isEmpty()) {
+            throw new PokemonListaVaciaException(
+                    "No hay pokemones registrados"
+            );
+        }
+
+        return pokemones.stream()
                 .map(this::mapearAResponse) // Usamos Stream API (Tema 15) para convertir cada Entity a Response
                 .collect(Collectors.toList());
     }
